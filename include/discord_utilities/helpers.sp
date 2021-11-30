@@ -142,13 +142,20 @@ public int GetMembersData(const char[] data, any dp)
 
 public void OnGetMembersAll(Handle hMemberList)
 {
-	//PrintToChatAll("OnGetMembersAll size %d", json_array_size(hMemberList));
+	//DeleteFile("addons/sourcemod/logs/dsmembers.json")
+	json_dump_file(hMemberList, "addons/sourcemod/logs/dsmembers.json");
+	//LogToFile("addons/sourcemod/logs/dsmembers.json", "OnGetMembersAll size %d", json_array_size(hMemberList));
+
+	Call_StartForward(g_hOnMemberDataDumped);
+	Call_Finish();
+
 	char userid[20];
 	DiscordGuildUser GuildUser;
 	DiscordUser user;
 	bool found;
 	char Query[256];
 	bool[] bUpdate = new bool[MaxClients+1];
+
 	for(int x = 1; x <= MaxClients; x++)
 	{
 		if(!IsClientInGame(x))
@@ -192,6 +199,9 @@ public void OnGetMembersAll(Handle hMemberList)
 			SQL_TQuery(g_hDB, SQLQuery_UpdatePlayer, Query);
 			bUpdate[x] = true;
 			CPrintToChat(x, "%s %T", g_sServerPrefix, "DiscordRevoked", x);
+
+			LogToFile("addons/sourcemod/logs/dsmembers_revoke.log", "Player %L got revoked. Memberlist json size: %d", x, json_array_size(hMemberList));
+
 			Call_StartForward(g_hOnAccountRevoked);
 			Call_PushCell(x);
 			Call_PushString(g_sUserID[x]);
@@ -425,10 +435,12 @@ public void OnManageRoleSent(Handle request, bool failure, int offset, int statu
 			ManageRole(dp);
 			//delete view_as<Handle>(dp);
 			delete request;
+			//LogError("OnManageRoleSent: Error code %d | Retrying to Managerole(dp)", statuscode);
 			return;
 		}
 		delete request;
 		delete view_as<Handle>(dp);
+		//LogError("OnManageRoleSent: Error code %d | Deleting everything and returning", statuscode);
 		return;
 	}
 	delete request
@@ -519,11 +531,24 @@ stock void CreateBot(bool guilds = true, bool listen = true)
 		delete Bot;
 		return;
 	}
+
 	delete Bot;
-	Bot = new DiscordBot(g_sBotToken);
+
+	//if(!g_bIsBotLoaded)
+	//{
+		Bot = new DiscordBot(g_sBotToken);
+	//}
+	
 	if(guilds)
 	{
-		Bot.GetGuilds(GuildList, _, listen);
+		//if(g_bIsBotLoaded)
+		//{
+			Bot.GetGuilds(GuildList, _, listen);
+		//}
+		//else
+		//{
+		//	CreateBot();
+		//}
 	}
 }
 
@@ -587,6 +612,19 @@ public Action VerifyAccounts(Handle timer)
 	AccountsCheck();
 }
 
+public Action Cmd_Unlink(int client, int args)
+{
+	if(g_bMember[client])
+	{
+		char Query[256];
+
+		char szSteamId[32];
+		GetClientAuthId(client, AuthId_Steam2, szSteamId, sizeof(szSteamId));
+
+		g_hDB.Format(Query, sizeof(Query), "SELECT userid FROM %s WHERE steamid = '%s'", g_sTableName, szSteamId);
+		SQL_TQuery(g_hDB, SQLQuery_UnlinkAccount, Query, GetClientUserId(client));
+	}
+}
 /*
 public Action Timer_Query_AccountCheck(Handle timer)
 {
@@ -634,4 +672,9 @@ stock void DU_DeleteMessageID(DiscordMessage discordmessage)
 	discordmessage.GetID(msgid, sizeof(msgid));
 	
 	Bot.DeleteMessageID(channelid, msgid);
+}
+
+stock bool IsClientValid(int client)
+{
+    return (0 < client <= MaxClients) && IsClientInGame(client) && !IsFakeClient(client);
 }

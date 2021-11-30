@@ -33,6 +33,16 @@ forward void DU_OnAccountRevoked(int client, const char[] userid);
  */
 forward void DU_OnCheckedAccounts(const char[] bottoken, const char[] guildid, const char[] tablename);
 
+
+/**
+ * Called after member data is dumped (as json)
+ *
+ * @noreturn
+ */
+forward void DU_OnMemberDataDumped();
+
+
+
 /**
  * Refreshing every client online in server. Can be used for grasping steam avatar of client and re-checking client in database.
  *

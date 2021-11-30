@@ -31,7 +31,7 @@ bool g_bRoleGiven[MAXPLAYERS+1];
 char g_sUserID[MAXPLAYERS+1][20];
 char g_sUniqueCode[MAXPLAYERS+1][36];
 
-Handle g_hOnCheckedAccounts, g_hOnLinkedAccount, g_hOnAccountRevoked;
+Handle g_hOnCheckedAccounts, g_hOnLinkedAccount, g_hOnAccountRevoked, g_hOnMemberDataDumped;
 
 DiscordBot Bot;
 
@@ -40,6 +40,7 @@ Database g_hDB;
 bool g_bIsMySQl;
 
 bool g_bLateLoad = false;
+//bool g_bIsBotLoaded = false;
 
 Handle hRateLimit = null;
 Handle hRateReset = null;

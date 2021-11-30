@@ -232,6 +232,76 @@ public int SQLQuery_LinkedAccount(Handle owner, Handle hndl, char [] error, any 
 	}
 }
 
+
+public int SQLQuery_UnlinkAccount(Handle owner, Handle hndl, char [] error, int userid)
+{
+	if(hndl == INVALID_HANDLE)
+	{
+		LogError("[DU-CheckUserData] Query failure: %s", error);
+		return;
+	}
+
+	int client = GetClientOfUserId(userid);
+
+	if(!IsClientValid(client))
+	{
+		return;
+	}
+
+	char szUserIdDB[20];
+	while (SQL_FetchRow(hndl))
+	{
+		SQL_FetchString(hndl, 0, szUserIdDB, sizeof(szUserIdDB));
+	}
+
+	if(strlen(g_sRoleID) > 5)
+	{
+		ManagingRole(szUserIdDB, g_sRoleID, k_EHTTPMethodDELETE);
+	}
+
+	char szSteamId[20];
+	GetClientAuthId(client, AuthId_Steam2, szSteamId, sizeof(szSteamId));
+
+	char Query[512];
+	if(g_bIsMySQl)
+	{
+		g_hDB.Format(Query, sizeof(Query), "UPDATE `%s` SET `userid` = '', member = 0 WHERE `steamid` = '%s';", g_sTableName, szSteamId);
+	}
+	else
+	{
+		g_hDB.Format(Query, sizeof(Query), "UPDATE %s SET userid = '', member = 0 WHERE steamid = '%s'", g_sTableName, szSteamId);
+	}
+	SQL_TQuery(g_hDB, SQLQuery_UnlinkAccount_Callback, Query, userid);
+}
+
+public int SQLQuery_UnlinkAccount_Callback(Handle owner, Handle hndl, char [] error, int userid)
+{
+	if(hndl == INVALID_HANDLE)
+	{
+		LogError("[DU-UnlinkAccount] Query failure: %s", error);
+		return;
+	}
+
+	int client = GetClientOfUserId(userid);
+
+	if(!IsClientValid(client))
+	{
+		return;
+	}
+
+	g_bMember[client] = false;
+
+	Call_StartForward(g_hOnAccountRevoked);
+	Call_PushCell(client);
+	Call_PushString(g_sUserID[client]);
+	Call_Finish();
+
+	g_sUserID[client][0] = '\0';
+
+	LogToFile("addons/sourcemod/logs/dsmembers_revoke.log", "Player %L unverified himself.", client);
+	CPrintToChat(client, "%s - You succesfully unlinked your account.", g_sServerPrefix);
+}
+
 public int SQLQuery_UpdatePlayer(Handle owner, Handle hndl, char [] error, any data)
 {
 	if(hndl == INVALID_HANDLE)

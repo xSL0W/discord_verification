@@ -110,7 +110,7 @@ methodmap DiscordBot < StringMap {
 		{
 			json_array_remove(channels, i);
 		}
-		PrintToServer("StopListeningToChannels: Deleting handle %d", channels);
+		//PrintToServer("StopListeningToChannels: Deleting handle %d", channels);
 		delete channels;
 	}
 

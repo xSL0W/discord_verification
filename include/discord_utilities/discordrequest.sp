@@ -127,6 +127,7 @@ stock void BuildAuthHeader(Handle request, DiscordBot bawt)
 	JsonObjectGetString(bawt, "token", token, sizeof(token));
 	FormatEx(buffer, sizeof(buffer), "Bot %s", token);
 	SteamWorks_SetHTTPRequestHeaderValue(request, "Authorization", buffer);
+	//g_bIsBotLoaded = true;
 }
 
 public void DiscordSendRequest(Handle request, const char[] route)

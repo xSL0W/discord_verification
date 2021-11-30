@@ -32,6 +32,7 @@ public void OnConfigsExecuted()
 		if(!CommandExists(g_sViewIDCommand))
 		{
 			RegConsoleCmd(g_sViewIDCommand, Command_ViewId);
+			RegConsoleCmd("sm_verify", Command_ViewId);
 		}
 		CreateBot();
 	}
@@ -205,19 +206,28 @@ public Action Command_ViewId(int client, int args)
 	}
 	
 	//CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkYourID", client, g_sUniqueCode[client]);
-	
-	CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkConnect", client);
-	CPrintToChat(client, "%s {blue}%s", g_sServerPrefix, g_sInviteLink);
-	
-	CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkUsage", client, g_sLinkCommand, g_sUniqueCode[client]);
-	CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkUsage2", client, g_sVerificationChannelName);
-	CPrintToChat(client, "%s You can also {yellow}copy-paste{default} from {green}console{default} :)", g_sServerPrefix);
+	if(!g_bMember[client])
+	{
+		CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkConnect", client);
+		CPrintToChat(client, "%s {blue}%s", g_sServerPrefix, g_sInviteLink);
+		
+		CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkUsage", client, g_sLinkCommand, g_sUniqueCode[client]);
+		CPrintToChat(client, "%s %T", g_sServerPrefix, "LinkUsage2", client, g_sVerificationChannelName);
+		CPrintToChat(client, "%s You can also {yellow}copy-paste{default} from {green}console{default} :)", g_sServerPrefix);
 
-	PrintToConsole(client, "************************************");
-	PrintToConsole(client, "[Discord] %T", "LinkConnect", client);
-	PrintToConsole(client, "[Discord] %s", g_sInviteLink);
-	PrintToConsole(client, "[Discord] Use %s %s",  g_sLinkCommand, g_sUniqueCode[client]);
-	PrintToConsole(client, "************************************");
+		PrintToConsole(client, "************************************");
+		PrintToConsole(client, "[Discord] %T", "LinkConnect", client);
+		PrintToConsole(client, "[Discord] %s", g_sInviteLink);
+		PrintToConsole(client, "[Discord] Use %s %s",  g_sLinkCommand, g_sUniqueCode[client]);
+		PrintToConsole(client, "************************************");
+	}
+	else
+	{
+		CPrintToChat(client, "%s - You are already verified. Enjoy your benefits :)", g_sServerPrefix);
+		CPrintToChat(client, "%s - You can change your verified discord account using {LIME}!unverify{DEFAULT} and {LIME}!verify{DEFAULT} again", g_sServerPrefix);
+	}
+
+
 	
 	return Plugin_Handled;
 }
