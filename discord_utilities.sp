@@ -18,7 +18,7 @@
 #include "discord_utilities/sql.sp"
 #include "discord_utilities/modules.sp"
 
-#pragma dynamic 250000
+#pragma dynamic 500000
 #pragma newdecls required
 #pragma semicolon 1
 
@@ -47,6 +47,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	g_hOnLinkedAccount = CreateGlobalForward("DU_OnLinkedAccount", ET_Ignore, Param_Cell, Param_String, Param_String, Param_String);
 	g_hOnAccountRevoked = CreateGlobalForward("DU_OnAccountRevoked", ET_Ignore, Param_Cell, Param_String);
 	g_hOnCheckedAccounts = CreateGlobalForward("DU_OnCheckedAccounts", ET_Event, Param_String, Param_String, Param_String);
+	g_hOnMemberDataDumped = CreateGlobalForward("DU_OnMemberDataDumped", ET_Ignore);
+
 	return APLRes_Success;
 }
 
@@ -58,7 +60,8 @@ public void OnPluginStart()
 
 	CreateCvars();
 
-	//RegConsoleCmd("sm_pc", smpc);
+	RegConsoleCmd("sm_unlink", Cmd_Unlink);
+	RegConsoleCmd("sm_unverify", Cmd_Unlink);
 
 	LoadTranslations("Discord-Utilities.phrases");
 	
@@ -67,7 +70,8 @@ public void OnPluginStart()
 		OnAllPluginsLoaded();
 		OnPluginEnd();
 		OnConfigsExecuted();
-		CreateTimer(3.0, Timer_RefreshClients, _, TIMER_FLAG_NO_MAPCHANGE);
-		CreateTimer(6.0, VerifyAccounts, _, TIMER_FLAG_NO_MAPCHANGE);
+		CreateTimer(5.0, Timer_RefreshClients, _, TIMER_FLAG_NO_MAPCHANGE);
+		CreateTimer(15.0, VerifyAccounts, _, TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
+

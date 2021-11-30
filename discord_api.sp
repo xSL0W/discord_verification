@@ -1,5 +1,5 @@
 #pragma semicolon 1
-#pragma dynamic 250000
+#pragma dynamic 500000
 
 #define PLUGIN_VERSION "0.1.104"
 
@@ -275,7 +275,8 @@ public void DiscordSendRequest(Handle request, const char[] route) {
 		int left;
 		GetTrieValue(hRateLeft, route, left);
 		if(left == 0) {
-			float remaining = float(resetTime) - float(time) + 1.0;
+			//float remaining = float(resetTime) - float(time) + 1.0;
+			float remaining = 1.0;
 			Handle dp = new DataPack();
 			WritePackCell(dp, request);
 			WritePackString(dp, route);
