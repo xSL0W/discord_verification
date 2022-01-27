@@ -183,26 +183,15 @@
 
 	"LinkUsage"
 	{
-		"#format"	"{1:s},{2:s}"
-		"en"		"Use {yellow}{1} {2}"
-		"hu"		"Használd a {yellow}{1} {2}"
-		"fr"		"Utiliser {yellow}{1} {2}"
-		"nl"		"Gebruik {yellow}{1} {2}"
-		"lv"		"Izmanto {yellow}{1} {2}"
-		"ru"		"использование {yellow}{1} {2}"
-		"ro"		"Folosește {yellow}{1} {2}"
+		"#format"	"{1:s},{2:s},{3:s}"
+		"en"		"Type {lime}{1} {2} {default}in {orange}#{3}"
+		"hu"		"Használd a {lime}{1} {2} {default}parancsot a {orange}#{3} {default}szobában"
 	}
-
-	"LinkUsage2"
+	
+	"CopyPasteFromConsole"
 	{
-		"#format"	"{1:s}"
-		"en"		"in channel {purple}#{1} {default}to get verified!"
-		"hu"		"parancsot a {purple}#{1} {default}szobában a megerősítéshez!"
-		"fr"		"dans le canal {purple}#{1} {default}pour se faire vérifier!"
-		"nl"		"in kanaal {purple}#{1} {default}om geverifieerd te worden!"
-		"lv"		"verifikācijas kodu kanālā {purple}#{1} {default}lai verificētu profilu!"
-		"ru"		"в канале {purple}#{1} {default}пройти проверку!"
-		"ro"		"În chanalul {purple}#{1} {default}pentru a te verifica!"
+		"en"		"You can also {lime}copy-paste{default} from {orange}console{default} :)"
+		"hu"		"Ki is {lime}másolhatod {default}a {orange}konzolból{default} :)"
 	}
 	
 	"CallAdminReportHandledTitle"
@@ -474,5 +463,15 @@
 		"lv"		"Verificē savu {blue}Discord {default}profilu! Raksti {orange}{1}"
 		"ru"		"Вы должны подтвердить свой {blue}Discord {default}учетная запись! Тип {orange}{1}"
 		"ro"		"Trebuie să îti asociezi Discord-ul tău! Tastează {orange}{1}"
+	}
+
+	"AlreadyVerified"
+	{
+		"en"		"You are already verified. Enjoy your benefits :)"
+	}
+
+	"CanChange"
+	{
+		"en"		"You can change your verified discord account using {LIME}!unverify{DEFAULT} and {LIME}!verify{DEFAULT} again"
 	}
 }
