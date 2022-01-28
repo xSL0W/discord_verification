@@ -29,10 +29,10 @@ bool g_bCallAdmin;
 public Plugin myinfo = 
 {
 	name = "Discord Utilities - Calladmin module",
-	author = "AiDN™",
-	description = "Calladmin module for the Discord Utilities",
+	author = "AiDN™ & Cruze03",
+	description = "Calladmin module for the Discord Utilities, code from Cruze03",
 	version = "1.0",
-	url = "https://steamcommunity.com/id/originalaidn"
+	url = "https://steamcommunity.com/id/originalaidn & https://github.com/Cruze03/discord-utilities"
 };
 
 public void OnLibraryAdded(const char[] szLibrary)	

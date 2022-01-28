@@ -234,8 +234,8 @@ public Action Command_ViewId(int client, int args)
 	}
 	else
 	{
-		CPrintToChat(client, "%s - %T", g_sServerPrefix, "AlreadyVerified");
-		CPrintToChat(client, "%s - %T", g_sServerPrefix, "CanChange");
+		CPrintToChat(client, "%s %T", g_sServerPrefix, "AlreadyVerified", client);
+		CPrintToChat(client, "%s %T", g_sServerPrefix, "CanChange", client);
 	}
 
 
