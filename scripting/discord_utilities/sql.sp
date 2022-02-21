@@ -298,8 +298,8 @@ public int SQLQuery_UnlinkAccount_Callback(Handle owner, Handle hndl, char [] er
 
 	g_sUserID[client][0] = '\0';
 
-	LogToFile("addons/sourcemod/logs/dsmembers_revoke.log", "Player %L unverified himself.", client);
-	CPrintToChat(client, "%s - You succesfully unlinked your account.", g_sServerPrefix);
+	if(g_cLogRevokeEnabled.IntValue == 1) LogToFile("addons/sourcemod/logs/dsmembers_revoke.log", "Player %L unverified himself.", client);
+	CPrintToChat(client, "%s - %T", g_sServerPrefix, "SuccessfullyUnlink", client);
 }
 
 public int SQLQuery_UpdatePlayer(Handle owner, Handle hndl, char [] error, any data)

@@ -32,6 +32,7 @@ public void OnConfigsExecuted()
 		if(!CommandExists(g_sViewIDCommand))
 		{
 			RegConsoleCmd(g_sViewIDCommand, Command_ViewId);
+			RegConsoleCmd(g_sUnLinkCommand, Cmd_Unlink);
 			RegConsoleCmd("sm_verify", Command_ViewId);
 		}
 		CreateBot();
@@ -125,6 +126,10 @@ public int OnSettingsChanged(ConVar convar, const char[] oldVal, const char[] ne
 	else if(convar == g_cViewIDCommand)
 	{
 		strcopy(g_sViewIDCommand, sizeof(g_sViewIDCommand), newVal);
+	}
+	else if(convar == g_cUnLinkCommand)
+	{
+		strcopy(g_sUnLinkCommand, sizeof(g_sUnLinkCommand), newVal);
 	}
 	else if(convar == g_cInviteLink)
 	{
@@ -234,8 +239,8 @@ public Action Command_ViewId(int client, int args)
 	}
 	else
 	{
-		CPrintToChat(client, "%s %T", g_sServerPrefix, "AlreadyVerified", client);
-		CPrintToChat(client, "%s %T", g_sServerPrefix, "CanChange", client);
+		CPrintToChat(client, "%s - %T", g_sServerPrefix, "AlreadyVerified", client);
+		CPrintToChat(client, "%s - %T", g_sServerPrefix, "CanChange", client, ChangePartsInString(g_sUnLinkCommand, "sm_", "!"), ChangePartsInString(g_sViewIDCommand, "sm_", "!"));
 	}
 
 
@@ -245,7 +250,7 @@ public Action Command_ViewId(int client, int args)
 
 public Action Check(int client, const char[] command, int args)
 {
-	if(!client || client > MaxClients)
+	if(!client || client > MaxClients && IsClientInGame(client))
 	{
 		return Plugin_Continue;
 	}

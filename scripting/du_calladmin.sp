@@ -5,14 +5,14 @@
 #include <discord_utilities>
 
 #include <calladmin>
-
 #include <multicolors>
-
-#define DEFAULT_COLOR "#00FF00"
 
 #pragma dynamic 500000
 #pragma newdecls required
 #pragma semicolon 1
+
+#define DEFAULT_COLOR "#00FF00"
+#define USE_AutoExecConfig
 
 ConVar g_cCallAdmin_Webhook, g_cCallAdmin_BotName, g_cCallAdmin_BotAvatar, g_cCallAdmin_Color, g_cCallAdmin_Content, g_cCallAdmin_FooterIcon, g_cDNSServerIP;
 

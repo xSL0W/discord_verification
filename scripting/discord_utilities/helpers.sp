@@ -143,7 +143,7 @@ public int GetMembersData(const char[] data, any dp)
 public void OnGetMembersAll(Handle hMemberList)
 {
 	//DeleteFile("addons/sourcemod/logs/dsmembers.json")
-	json_dump_file(hMemberList, "addons/sourcemod/logs/dsmembers.json");
+	if(g_cDsMembersEnabled.IntValue ==1) json_dump_file(hMemberList, "addons/sourcemod/logs/dsmembers.json");
 	//LogToFile("addons/sourcemod/logs/dsmembers.json", "OnGetMembersAll size %d", json_array_size(hMemberList));
 
 	Call_StartForward(g_hOnMemberDataDumped);
@@ -200,7 +200,7 @@ public void OnGetMembersAll(Handle hMemberList)
 			bUpdate[x] = true;
 			CPrintToChat(x, "%s %T", g_sServerPrefix, "DiscordRevoked", x);
 
-			LogToFile("addons/sourcemod/logs/dsmembers_revoke.log", "Player %L got revoked. Memberlist json size: %d", x, json_array_size(hMemberList));
+			if(g_cLogRevokeEnabled.IntValue == 1) LogToFile("addons/sourcemod/logs/dsmembers_revoke.log", "Player %L got revoked. Memberlist json size: %d", x, json_array_size(hMemberList));
 
 			Call_StartForward(g_hOnAccountRevoked);
 			Call_PushCell(x);
@@ -309,6 +309,7 @@ void CreateCvars()
 
 	g_cLinkCommand = AutoExecConfig_CreateConVar("sm_du_link_command", "!link", "Command to use in text channel.");
 	g_cViewIDCommand = AutoExecConfig_CreateConVar("sm_du_viewid_command", "sm_viewid", "Command to view id.");
+	g_cUnLinkCommand = AutoExecConfig_CreateConVar("sm_du_unlink_command", "sm_unlink", "Command to unlink.");
 	g_cInviteLink = AutoExecConfig_CreateConVar("sm_du_link", "https://discord.gg/83g5xcE", "Invite link of your discord server.");
 
 	g_cDiscordPrefix = AutoExecConfig_CreateConVar("sm_du_discord_prefix", "[{lightgreen}Discord{default}]", "Prefix for discord messages.");
@@ -317,6 +318,9 @@ void CreateCvars()
 	g_cDatabaseName = AutoExecConfig_CreateConVar("sm_du_database_name", "du", "Section name in databases.cfg.");
 	g_cTableName = AutoExecConfig_CreateConVar("sm_du_table_name", "du_users", "Table Name.");
 	g_cPruneDays = AutoExecConfig_CreateConVar("sm_du_prune_days", "60", "Prune database with players whose last connect is X DAYS and he is not member of discord server. 0 to disable.");
+
+	g_cLogRevokeEnabled = AutoExecConfig_CreateConVar("sm_du_logrevoke_enabled", "1", "Enable log for revoke?");
+	g_cDsMembersEnabled = AutoExecConfig_CreateConVar("sm_du_dsmembersfile_enabled", "1", "Enable to create logs/dsmembers.json?");
 
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
@@ -334,6 +338,7 @@ void CreateCvars()
 
 	g_cLinkCommand = CreateConVar("sm_du_link_command", "!link", "Command to use in text channel.");
 	g_cViewIDCommand = CreateConVar("sm_du_viewid_command", "sm_viewid", "Command to view id.");
+	g_cUnLinkCommand = CreateConVar("sm_du_unlink_command", "sm_unlink", "Command to unlink.");
 	g_cInviteLink = CreateConVar("sm_du_link", "https://discord.gg/83g5xcE", "Invite link of your discord server.");
 
 	g_cDiscordPrefix = CreateConVar("sm_du_discord_prefix", "[{lightgreen}Discord{default}]", "Prefix for discord messages.");
@@ -342,6 +347,9 @@ void CreateCvars()
 	g_cDatabaseName = CreateConVar("sm_du_database_name", "du", "Section name in databases.cfg.");
 	g_cTableName = CreateConVar("sm_du_table_name", "du_users", "Table Name.");
 	g_cPruneDays = CreateConVar("sm_du_prune_days", "60", "Prune database with players whose last connect is X DAYS and he is not member of discord server. 0 to disable.");
+	
+	g_cLogRevokeEnabled = CreateConVar("sm_du_logrevoke_enabled", "1", "Enable log for revoke?");
+	g_cDsMembersEnabled = CreateConVar("sm_du_dsmembersfile_enabled", "1", "Enable to create logs/dsmembers.json?");
 	
 	AutoExecConfig(true, "Discord-Utilities");
 	#endif
@@ -354,6 +362,7 @@ void CreateCvars()
 
 	HookConVarChange(g_cLinkCommand, OnSettingsChanged);
 	HookConVarChange(g_cViewIDCommand, OnSettingsChanged);
+	HookConVarChange(g_cUnLinkCommand, OnSettingsChanged);
 	HookConVarChange(g_cInviteLink, OnSettingsChanged);
 
 	HookConVarChange(g_cDiscordPrefix, OnSettingsChanged);
@@ -370,6 +379,7 @@ void LoadCvars()
 	
 	g_cLinkCommand.GetString(g_sLinkCommand, sizeof(g_sLinkCommand));
 	g_cViewIDCommand.GetString(g_sViewIDCommand, sizeof(g_sViewIDCommand));
+	g_cUnLinkCommand.GetString(g_sUnLinkCommand, sizeof(g_sUnLinkCommand));
 	g_cInviteLink.GetString(g_sInviteLink, sizeof(g_sInviteLink));
 
 	g_cDiscordPrefix.GetString(g_sDiscordPrefix, sizeof(g_sDiscordPrefix));

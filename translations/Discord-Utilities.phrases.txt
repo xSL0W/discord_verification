@@ -467,11 +467,17 @@
 
 	"AlreadyVerified"
 	{
-		"en"		"- You are already verified. Enjoy your benefits :)"
+		"en"		"You are already verified. Enjoy your benefits :)"
 	}
 
 	"CanChange"
 	{
-		"en"		"- You can change your verified discord account using {LIME}!unverify{DEFAULT} and {LIME}!verify{DEFAULT} again"
+		"#format"	"{1:s},{2:s}"
+		"en"		"You can change your verified discord account using {LIME}{1}{DEFAULT} and {LIME}{2}{DEFAULT} again."
+	}
+
+	"SuccessfullyUnlink"
+	{
+		"en"		"You successfully unlinked your account."
 	}
 }
