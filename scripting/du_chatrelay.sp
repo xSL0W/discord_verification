@@ -85,7 +85,7 @@ public Plugin myinfo =
 	name = "Discord Utilities - Chatrelay module",
 	author = "AiDN™ & Cruze03",
 	description = "Chatrelay module for the Discord Utilities, code from Cruze03",
-	version = "1.1",
+	version = "1.0",
 	url = "https://steamcommunity.com/id/originalaidn & https://github.com/Cruze03/discord-utilities"
 };
 
@@ -277,7 +277,7 @@ public Action Command_AdminChat(int client, const char[] command, int argc)
 	{
 		return Plugin_Continue;
 	}
-	if(IsValidClient(client) && g_bBaseComm && BaseComm_IsClientGagged(client))
+	if(g_bBaseComm && BaseComm_IsClientGagged(client))
 	{
 		return Plugin_Continue;
 	}
@@ -296,7 +296,7 @@ public Action OnClientSayCommand(int client, const char[] command, const char[] 
 	{
 		return Plugin_Continue;
 	}
-	if(IsValidClient(client) && g_bBaseComm && BaseComm_IsClientGagged(client))
+	if(IsClientInGame(client) && g_bBaseComm && BaseComm_IsClientGagged(client))
 	{
 		return Plugin_Continue;
 	}
@@ -739,8 +739,3 @@ stock void GetGuilds()
 {	
 	Bot.GetGuilds(GuildList, _, true);
 }
-
-stock bool IsValidClient(int client)
-{
-    return (1 <= client <= MaxClients && IsClientInGame(client));
-} 
