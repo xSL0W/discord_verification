@@ -257,8 +257,3 @@ public Action Check(int client, const char[] command, int args)
 	}
 	return Plugin_Continue;
 }
-
-stock bool IsValidClient(int client)
-{
-    return (1 <= client <= MaxClients && IsClientInGame(client));
-} 
