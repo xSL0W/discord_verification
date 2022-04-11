@@ -250,7 +250,7 @@ public Action Command_ViewId(int client, int args)
 
 public Action Check(int client, const char[] command, int args)
 {
-	if(!client || client > MaxClients && IsClientInGame(client))
+	if(IsClientValid(client) && !client || client > MaxClients)
 	{
 		return Plugin_Continue;
 	}
