@@ -60,7 +60,6 @@ public void OnPluginStart()
 
 	CreateCvars();
 
-	RegConsoleCmd("sm_unlink", Cmd_Unlink);
 	RegConsoleCmd("sm_unverify", Cmd_Unlink);
 
 	LoadTranslations("Discord-Utilities.phrases");
