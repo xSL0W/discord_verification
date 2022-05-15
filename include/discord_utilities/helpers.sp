@@ -143,7 +143,7 @@ public int GetMembersData(const char[] data, any dp)
 public void OnGetMembersAll(Handle hMemberList)
 {
 	//DeleteFile("addons/sourcemod/logs/dsmembers.json")
-	json_dump_file(hMemberList, "addons/sourcemod/logs/dsmembers.json");
+	//json_dump_file(hMemberList, "addons/sourcemod/logs/dsmembers.json");
 	//LogToFile("addons/sourcemod/logs/dsmembers.json", "OnGetMembersAll size %d", json_array_size(hMemberList));
 
 	Call_StartForward(g_hOnMemberDataDumped);
