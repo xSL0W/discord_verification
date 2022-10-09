@@ -16,7 +16,7 @@ ConVar g_cDatabaseName, g_cTableName, g_cPruneDays;
 ConVar g_cPrimaryServer;
 
 char g_sVerificationChannelID[20], g_sGuildID[20], g_sRoleID[20];
-char g_sBotToken[80];
+char g_sBotToken[256];
 char g_sLinkCommand[20], g_sViewIDCommand[20], g_sInviteLink[30];
 char g_sDiscordPrefix[128], g_sServerPrefix[128];
 char g_sTableName[32];
